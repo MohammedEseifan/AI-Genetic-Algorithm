@@ -1,4 +1,4 @@
-package TenImplementation;
+package GeneticImplemenations.Ten.Implementation;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

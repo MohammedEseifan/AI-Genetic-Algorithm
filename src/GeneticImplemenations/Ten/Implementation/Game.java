@@ -1,6 +1,6 @@
-package TenImplementation;
+package GeneticImplemenations.Ten.Implementation;
 
-import TenAI.TenAI;
+import GeneticImplemenations.Ten.AI.TenAI;
 
 /**
  * Created by Mohammed on 23-Jan-17.

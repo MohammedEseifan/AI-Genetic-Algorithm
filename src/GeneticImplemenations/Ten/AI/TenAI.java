@@ -1,8 +1,8 @@
-package TenAI;
+package GeneticImplemenations.Ten.AI;
 
 import GeneticAlgorithm.DNA;
-import TenImplementation.MainGrid;
-import TenImplementation.XOGrid;
+import GeneticImplemenations.Ten.Implementation.MainGrid;
+import GeneticImplemenations.Ten.Implementation.XOGrid;
 
 import java.util.List;
 import java.util.Random;
@@ -31,7 +31,7 @@ public class TenAI {
         }
     }
 
-    public TenAI(DNA data, XOGrid.GridPiece piece){
+    public TenAI(TenDNA data, XOGrid.GridPiece piece){
         this.data=data;
         this.AIPiece=piece;
 

@@ -1,4 +1,4 @@
-package TenAI;
+package GeneticImplemenations.Ten.AI;
 
 import GeneticAlgorithm.Population;
 

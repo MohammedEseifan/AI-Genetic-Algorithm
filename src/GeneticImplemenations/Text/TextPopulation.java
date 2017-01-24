@@ -1,4 +1,4 @@
-package TextTest;
+package GeneticImplemenations.Text;
 
 import GeneticAlgorithm.Population;
 

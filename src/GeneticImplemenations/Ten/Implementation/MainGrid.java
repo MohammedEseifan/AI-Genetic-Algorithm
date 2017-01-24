@@ -1,4 +1,4 @@
-package TenImplementation;
+package GeneticImplemenations.Ten.Implementation;
 
 import java.awt.*;
 import java.util.ArrayList;

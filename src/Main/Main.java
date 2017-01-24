@@ -1,8 +1,8 @@
 package Main;
 
-import TenImplementation.Game;
-import TenImplementation.XOGrid;
-import TextTest.TextDNA;
+import GeneticImplemenations.Ten.Implementation.Game;
+import GeneticImplemenations.Ten.Implementation.XOGrid;
+import GeneticImplemenations.Text.TextDNA;
 
 /**
  * Created by Mohammed on 23-Jan-17.
@@ -25,7 +25,7 @@ public class Main {
 //        System.out.println(a.toString());
 //        GameVizualizer v = new GameVizualizer(a,800);
 
-        Game game = new Game(new TenAI.TenAI(new TextDNA("t"), XOGrid.GridPiece.X), new TenAI.TenAI(new TextDNA("t"), XOGrid.GridPiece.O),true);
+        Game game = new Game(new GeneticImplemenations.Ten.AI.TenAI(new TextDNA("t"), XOGrid.GridPiece.X), new GeneticImplemenations.Ten.AI.TenAI(new TextDNA("t"), XOGrid.GridPiece.O),true);
         game.beginGame();
     }
 
