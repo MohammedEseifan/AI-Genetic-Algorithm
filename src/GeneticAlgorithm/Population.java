@@ -19,12 +19,11 @@ public abstract class Population{
     public Population(int populationSize, float DNAMutationRate) {
         this.population = new DNA[populationSize];
         this.populationSize=populationSize;
-        this.randomGenerator = new Random(System.currentTimeMillis());
+        this.randomGenerator = new Random();
         this.DNAMutationRate = DNAMutationRate;
 
     }
 
-    public abstract DNA newDNA();
 
     public void calculatePopulationFitness(){
         fittestDNA = population[0];
@@ -33,14 +32,20 @@ public abstract class Population{
                 fittestDNA=dna;
             }
         }
+
+        System.out.printf("Fittest DNA: %s\n",fittestDNA.toString());
+    }
+
+    public float getMaxFitness(){
+        return fittestDNA==null?0:fittestDNA.getFitness();
     }
 
     public List<DNA> generateMatingPool(){
-
+        calculatePopulationFitness();
         List<DNA> matingPool = new ArrayList<>();
         for(DNA dna: population){
             //Determines how many times this DNA object should be added to the mating pool (aka probability of being mated)
-            int num = (int) (50*dna.getFitness()/fittestDNA.getFitness());
+            int num = (int) (100*dna.getFitness()/fittestDNA.getFitness());
             for (int x = 0; x <= num; x++){
                 matingPool.add(dna);
             }
@@ -64,6 +69,5 @@ public abstract class Population{
             population[i].mutate(DNAMutationRate);
         }
 
-        calculatePopulationFitness();
     }
 }

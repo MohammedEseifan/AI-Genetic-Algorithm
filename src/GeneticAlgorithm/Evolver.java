@@ -5,10 +5,21 @@ package GeneticAlgorithm;
  */
 public class Evolver{
 
+    Population pop;
+    float targetFitness;
 
-    public Evolver(Population pop) {
+    public Evolver(Population pop, float targetFitness) {
+        this.targetFitness = targetFitness;
+        this.pop = pop;
+    }
 
-
-
+    public void begin() {
+        System.out.println("Starting evolution");
+        int i = 1;
+        while(pop.getMaxFitness()<targetFitness){
+            System.out.println("Running generation: "+i);
+            pop.reproduce();
+            i++;
+        }
     }
 }

@@ -11,7 +11,7 @@ public abstract class DNA {
 
     public DNA(){
         this.fitness=0f;
-        randomGenerator = new Random(System.currentTimeMillis());
+        randomGenerator = new Random();
     }
 
     public abstract float calculateFitness();
