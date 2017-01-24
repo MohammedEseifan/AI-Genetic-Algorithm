@@ -1,5 +1,6 @@
 package TenImplementation;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 /**
@@ -28,7 +29,7 @@ public class MainGrid{
             validSpots.add(pieceIndex);
         }else{
             for (int i = 0; i < 9; i++) {
-                if(grid[i].getWinner()== XOGrid.GridPiece.NONE){
+                if(grid[i].getWinner()== XOGrid.GridPiece.NONE && grid[i].isGridFull()==false){ //If the grid isnt already won and it isnt full
                     validSpots.add(i);
                 }
             }
@@ -37,12 +38,17 @@ public class MainGrid{
         checkWinner();
     }
 
+    public List<Integer> getValidSpots() {
+        return validSpots;
+    }
+
     @Override
     /**
      * Very crude toString function for debugging purposes
      */
     public String toString() {
         String s ="Grid:\n";
+
 
         for (int y = 0; y < 3; y++) {
             for (int y2 = 0; y2 < 3; y2++) {
@@ -83,5 +89,39 @@ public class MainGrid{
 
     }
 
+    public List<Integer> getXOGridOpenSpots(int gridIndex){
+        return grid[gridIndex].getOpenSpots();
+    }
+
+    public void draw(int x, int y, int width, int height, int padding, Graphics2D g){
+        int spacing = (width-2*padding)/3;
+
+        g.setStroke(new BasicStroke(3));
+        g.setColor(new Color(67, 67, 67));
+
+        if(winner!= XOGrid.GridPiece.NONE){
+            if(winner== XOGrid.GridPiece.X){
+                g.setColor(new Color(52, 73, 255));
+                g.fillRect(x + padding , y + padding, width-2*padding, height-2*padding);
+            }else{ //If 'O' won
+                g.setColor(new Color(255, 51, 46));
+                g.fillOval(x+ padding , y + padding, width-2*padding, height-2*padding);
+            }
+            return;
+        }
+
+        //Drawing grid lines
+        for (int i = 1; i < 3; i++) {
+            g.drawLine(x+padding+spacing*i,y+padding,x+padding+spacing*i,y+height-padding); //Vertical line
+            g.drawLine(x+padding,y+padding+spacing*i,x+width-padding,y+padding+spacing*i); //Horizontal line
+        }
+
+        //Drawing grids
+        for (int dx = 0; dx < 3; dx++) {
+            for (int dy = 0; dy < 3; dy++) {
+                grid[dy*3+dx].draw(dx*spacing+padding,dy*spacing+padding,spacing,spacing,5,g);
+            }
+        }
+    }
 
 }
