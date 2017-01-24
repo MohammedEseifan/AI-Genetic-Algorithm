@@ -37,6 +37,29 @@ public class MainGrid{
         checkWinner();
     }
 
+    @Override
+    /**
+     * Very crude toString function for debugging purposes
+     */
+    public String toString() {
+        String s ="Grid:\n";
+
+        for (int y = 0; y < 3; y++) {
+            for (int y2 = 0; y2 < 3; y2++) {
+                s+= String.format("%s%%%s%%%s\n",grid[3*y].getString(y2),grid[3*y+1].getString(y2),grid[3*y+2].getString(y2));
+
+            }
+
+            s+=y<2?"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n":"";
+        }
+
+        return s;
+    }
+
+    public XOGrid.GridPiece getWinner() {
+        return winner;
+    }
+
     private void checkWinner(){
         int winCombinations[][] = {
                 {0,1,2}, //Row 1 (from top)
@@ -57,6 +80,7 @@ public class MainGrid{
                 return;
             }
         }
+
     }
 
 

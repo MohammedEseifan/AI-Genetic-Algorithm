@@ -7,10 +7,22 @@ import java.util.List;
  * Created by Mohammed on 23-Jan-17.
  */
 public class XOGrid {
+
+    //Enum used for Grid pieces
     public enum GridPiece{
-        X,
-        O,
-        NONE
+        X("X"),
+        O("O"),
+        NONE(" ");
+
+        String value;
+        GridPiece(String v){
+            this.value=v;
+        }
+
+        @Override
+        public String toString(){
+            return value;
+        }
     }
 
     private GridPiece grid[] = new GridPiece[9];
@@ -64,5 +76,10 @@ public class XOGrid {
 
     public GridPiece getWinner() {
         return winner;
+    }
+
+    public String getString(int row){
+
+        return String.format("    %s|%s|%s    ",grid[row*3].toString(),grid[row*3+1].toString(),grid[row*3+2].toString());
     }
 }
