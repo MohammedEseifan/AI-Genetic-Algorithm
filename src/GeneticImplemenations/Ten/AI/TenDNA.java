@@ -1,6 +1,8 @@
 package GeneticImplemenations.Ten.AI;
 
 import GeneticAlgorithm.DNA;
+import GeneticImplemenations.Ten.Implementation.Game;
+import GeneticImplemenations.Ten.Implementation.XOGrid;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,9 +14,17 @@ import java.util.Random;
  */
 public class TenDNA extends DNA implements Serializable {
 
-    List<AIAttribute> attributes;
+    private List<AIAttribute> attributes;
+    private TenDNA enemyDNA;
+    private final int TEST_GAMES = 10;
 
-    public TenDNA(){
+    public void setEnemyDNA(TenDNA enemyDNA) {
+        this.enemyDNA = enemyDNA;
+    }
+
+    public TenDNA(TenDNA enemyDNA){
+        this.enemyDNA=enemyDNA;
+
         initAttributes();
     }
 
@@ -38,7 +48,15 @@ public class TenDNA extends DNA implements Serializable {
 
     @Override
     public float calculateFitness() {
-        return 0;
+        float sum = 0;
+        Game testGame = new Game(this,enemyDNA);
+        for (int i = 0; i < TEST_GAMES; i++) {
+            if(testGame.beginGame()== XOGrid.GridPiece.X){
+                sum++;
+            }
+        }
+
+        return sum/TEST_GAMES;
     }
 
     @Override

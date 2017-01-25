@@ -1,6 +1,5 @@
 package GeneticImplemenations.Ten.AI;
 
-import GeneticAlgorithm.DNA;
 import GeneticImplemenations.Ten.Implementation.MainGrid;
 import GeneticImplemenations.Ten.Implementation.XOGrid;
 
@@ -13,7 +12,7 @@ import java.util.Random;
 public class TenAI {
 
     private Random randomGenerator= new Random();
-    private DNA data;
+    private TenDNA data;
     private XOGrid.GridPiece AIPiece;
 
 
@@ -22,18 +21,16 @@ public class TenAI {
         int gridIndex= gridValidSpots.get(randomGenerator.nextInt(gridValidSpots.size()));
         List<Integer> openSpots  = grid.getXOGridOpenSpots(gridIndex);
         try {
-            if(openSpots.size()==0){
-                System.out.println("T");
-            }
             grid.setPiece(gridIndex,openSpots.get(randomGenerator.nextInt(openSpots.size())),AIPiece);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
     }
 
+
     public TenAI(TenDNA data, XOGrid.GridPiece piece){
         this.data=data;
         this.AIPiece=piece;
-
     }
+
 }
