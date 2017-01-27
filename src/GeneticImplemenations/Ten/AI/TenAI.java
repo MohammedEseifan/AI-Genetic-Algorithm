@@ -16,7 +16,7 @@ public class TenAI {
     private GameTree tree;
 
     public void playTurn(MainGrid grid){
-        int[] move = tree.getBestMove();
+        int[] move = tree.getBestMove(grid);
         try {
             grid.setPiece(move[0],move[1],AIPiece);
         } catch (IllegalAccessException e) {

@@ -11,6 +11,16 @@ import java.util.List;
 public class XOGrid {
 
 
+    public List<Integer> getIndexOfPiece(GridPiece gridPiece) {
+        List<Integer> returnValue = new ArrayList<>();
+        for (int i = 0; i < 9; i++) {
+            if(grid[i]==gridPiece){
+                returnValue.add(i);
+            }
+        }
+        return returnValue;
+    }
+
     //Enum used for Grid pieces
     public enum GridPiece {
         X("X"),
@@ -31,12 +41,23 @@ public class XOGrid {
 
     private GridPiece grid[] = new GridPiece[9];
     private GridPiece winner = GridPiece.NONE;
+    private int winCombinations[][] = {
+            {0, 1, 2}, //Row 1 (from top)
+            {3, 4, 5}, //Row 2
+            {6, 7, 8}, //Row 3
+            {0, 3, 6}, //Column 1 (from left)
+            {1, 4, 7}, //Column 2
+            {2, 5, 8}, //Column 3
+            {0, 4, 8}, //Left Diagonal
+            {2, 4, 6}};//Right Diagonal
 
     public XOGrid() {
         for (int i = 0; i < 9; i++) {
             grid[i] = GridPiece.NONE;
         }
     }
+
+
 
     public void setPiece(int index, GridPiece value) throws IllegalAccessException {
         if (grid[index] != GridPiece.NONE || value == GridPiece.NONE || winner != GridPiece.NONE) {
@@ -46,16 +67,12 @@ public class XOGrid {
         checkWinner();
     }
 
+    public GridPiece getPiece(int index){
+        return grid[index];
+    }
+
     private void checkWinner() {
-        int winCombinations[][] = {
-                {0, 1, 2}, //Row 1 (from top)
-                {3, 4, 5}, //Row 2
-                {6, 7, 8}, //Row 3
-                {0, 3, 6}, //Column 1 (from left)
-                {1, 4, 7}, //Column 2
-                {2, 5, 8}, //Column 3
-                {0, 4, 8}, //Left Diagonal
-                {2, 4, 6}};//Right Diagonal
+
 
         //Check each combination to see if there's a winner
         for (int i = 0; i < 8; i++) {
@@ -87,6 +104,13 @@ public class XOGrid {
         return String.format("    %s|%s|%s    ", grid[row * 3].toString(), grid[row * 3 + 1].toString(), grid[row * 3 + 2].toString());
     }
 
+    public String toString(){
+        String s = "";
+        for (int i = 0; i < 3; i++) {
+            s+=getString(i)+"\n";
+        }
+        return s;
+    }
 
     public void draw(int x, int y, int width, int height, int padding, Graphics2D g) {
         g.setStroke(new BasicStroke(1));
@@ -135,6 +159,18 @@ public class XOGrid {
     protected XOGrid clone() {
         XOGrid newGrid = new XOGrid();
         newGrid.grid = Arrays.copyOf(grid,9);
+        newGrid.winner = winner;
         return newGrid;
     }
+
+
+    public boolean equals(XOGrid otherGrid) {
+        for (int i = 0; i < 9; i++) {
+            if(grid[i]!= otherGrid.grid[i]) return false;
+        }
+
+        
+        return true;
+    }
+
 }

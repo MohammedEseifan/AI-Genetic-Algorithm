@@ -11,6 +11,9 @@ import java.util.List;
 public class TenPopulation extends Population {
     public TenPopulation(int populationSize, float DNAMutationRate) {
         super(populationSize, DNAMutationRate);
+        for (int i = 0; i < populationSize; i++) {
+            population[i] = new TenDNA();
+        }
     }
 
     @Override

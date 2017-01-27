@@ -42,6 +42,9 @@ public class MainGrid{
         return validSpots;
     }
 
+    public XOGrid.GridPiece getInnerGridWinner(int index){
+        return grid[index].getWinner();
+    }
     @Override
     /**
      * Very crude toString function for debugging purposes
@@ -133,5 +136,17 @@ public class MainGrid{
             newGrid.validSpots.addAll(validSpots);
         }
         return newGrid;
+    }
+
+    public boolean equals(MainGrid otherGrid){
+        for (int i = 0; i < 9; i++) {
+            if(!grid[i].equals(otherGrid.getInnerGrid(i))) return false;
+        }
+
+        return winner.equals(otherGrid.winner);
+    }
+
+    public XOGrid getInnerGrid(int x) {
+        return grid[x];
     }
 }

@@ -25,7 +25,7 @@ public class Main {
 //        GameVizualizer v = new GameVizualizer(a,800);
 
         Game game = new Game(new TenDNA(),new TenDNA());
-        game.beginGame();
+        System.out.println(game.beginGame());
     }
 
 }

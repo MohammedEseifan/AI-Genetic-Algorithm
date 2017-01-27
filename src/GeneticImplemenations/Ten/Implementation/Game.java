@@ -8,7 +8,7 @@ import GeneticImplemenations.Ten.AI.TenDNA;
  */
 public class Game {
     private XOGrid.GridPiece currentTurn;
-    private MainGrid gameGrid;
+    private MainGrid gameGrid = new MainGrid();
     private TenAI players[] = new TenAI[2];
     private GameVizualizer gameVizualizer;
 

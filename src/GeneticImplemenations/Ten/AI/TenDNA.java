@@ -14,12 +14,12 @@ import java.util.Random;
  */
 public class TenDNA extends DNA implements Serializable {
 
-    private List<AIAttribute> attributes;
+    private List<AIAttribute> attributes = new ArrayList<>();
     private TenDNA enemyDNA;
     private final int TEST_GAMES = 10;
 
     public TenDNA() {
-
+        initAttributes();
     }
 
     public void setEnemyDNA(TenDNA enemyDNA) {
@@ -28,7 +28,6 @@ public class TenDNA extends DNA implements Serializable {
 
     public TenDNA(TenDNA enemyDNA){
         this.enemyDNA=enemyDNA;
-
         initAttributes();
     }
 
@@ -38,10 +37,14 @@ public class TenDNA extends DNA implements Serializable {
 
     private void initAttributes(){
         attributes.clear();
-
+        attributes.add(new AIAttribute("mainWonGrids",0,5,randomGenerator));
+        attributes.add(new AIAttribute("mainWinPaths",0,5,randomGenerator));
+        attributes.add(new AIAttribute("mainGridsNeeded",0,5,randomGenerator));
+        attributes.add(new AIAttribute("innerPiecesNeeded",0,5,randomGenerator));
+        attributes.add(new AIAttribute("innerWinPaths",0,5,randomGenerator));
     }
 
-    public Integer getArribute(String name){
+    public Integer getAttribute(String name){
         for (AIAttribute attr: attributes) {
             if(attr.getName().equalsIgnoreCase(name)){
                 return attr.getValue();
@@ -128,6 +131,7 @@ class AIAttribute implements Serializable{
 
     public void setValue(int value) {
         this.value = value;
+
     }
 
     public void setValueToRandom() {
