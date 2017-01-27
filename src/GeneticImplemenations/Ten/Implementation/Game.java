@@ -15,12 +15,12 @@ public class Game {
 
     public Game(TenDNA player1DNA, TenDNA player2DNA) {
         players[0] = new TenAI(player1DNA, XOGrid.GridPiece.X);
-        players[1] =  new TenAI(player2DNA, XOGrid.GridPiece.O);
+        players[1] = new TenAI(player2DNA, XOGrid.GridPiece.O);
     }
 
     public Game(TenDNA player1DNA, TenDNA player2DNA, boolean visualizeGame) {
         players[0] = new TenAI(player1DNA, XOGrid.GridPiece.X);
-        players[1] =  new TenAI(player2DNA, XOGrid.GridPiece.O);
+        players[1] = new TenAI(player2DNA, XOGrid.GridPiece.O);
         if (visualizeGame) {
             gameVizualizer = new GameVizualizer(gameGrid, 800);
         }

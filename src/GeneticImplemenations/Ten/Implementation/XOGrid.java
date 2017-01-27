@@ -14,7 +14,7 @@ public class XOGrid {
     public List<Integer> getIndexOfPiece(GridPiece gridPiece) {
         List<Integer> returnValue = new ArrayList<>();
         for (int i = 0; i < 9; i++) {
-            if(grid[i]==gridPiece){
+            if (grid[i] == gridPiece) {
                 returnValue.add(i);
             }
         }
@@ -58,7 +58,6 @@ public class XOGrid {
     }
 
 
-
     public void setPiece(int index, GridPiece value) throws IllegalAccessException {
         if (grid[index] != GridPiece.NONE || value == GridPiece.NONE || winner != GridPiece.NONE) {
             throw new IllegalAccessException("You cant place a piece here");
@@ -67,7 +66,7 @@ public class XOGrid {
         checkWinner();
     }
 
-    public GridPiece getPiece(int index){
+    public GridPiece getPiece(int index) {
         return grid[index];
     }
 
@@ -104,10 +103,10 @@ public class XOGrid {
         return String.format("    %s|%s|%s    ", grid[row * 3].toString(), grid[row * 3 + 1].toString(), grid[row * 3 + 2].toString());
     }
 
-    public String toString(){
+    public String toString() {
         String s = "";
         for (int i = 0; i < 3; i++) {
-            s+=getString(i)+"\n";
+            s += getString(i) + "\n";
         }
         return s;
     }
@@ -117,13 +116,13 @@ public class XOGrid {
         int pieceSize = (width - 2 * padding) / 3;
         int spacing = 5;
 
-        if(winner!=GridPiece.NONE){
-            if(winner==GridPiece.X){
+        if (winner != GridPiece.NONE) {
+            if (winner == GridPiece.X) {
                 g.setColor(new Color(52, 73, 255));
-                g.fillRect(x + padding , y + padding, width-2*spacing, height-2*spacing);
-            }else{ //If 'O' won
+                g.fillRect(x + padding, y + padding, width - 2 * spacing, height - 2 * spacing);
+            } else { //If 'O' won
                 g.setColor(new Color(255, 51, 46));
-                g.fillOval(x+ padding , y + padding, width-2*spacing, height-2*spacing);
+                g.fillOval(x + padding, y + padding, width - 2 * spacing, height - 2 * spacing);
             }
             return;
         }
@@ -133,22 +132,22 @@ public class XOGrid {
             for (int dy = 0; dy < 3; dy++) {
                 if (grid[dy * 3 + dx] == GridPiece.X) {
                     g.setColor(new Color(52, 73, 255));
-                    g.fillRect(x + padding + pieceSize * dx+spacing, y + padding + pieceSize * dy+spacing, pieceSize-2*spacing, pieceSize-2*spacing);
+                    g.fillRect(x + padding + pieceSize * dx + spacing, y + padding + pieceSize * dy + spacing, pieceSize - 2 * spacing, pieceSize - 2 * spacing);
                 } else if (grid[dy * 3 + dx] == GridPiece.O) {
                     g.setColor(new Color(255, 51, 46));
-                    g.fillOval(x + padding + pieceSize * dx+spacing, y + padding + pieceSize * dy+spacing, pieceSize-2*spacing, pieceSize-2*spacing);
+                    g.fillOval(x + padding + pieceSize * dx + spacing, y + padding + pieceSize * dy + spacing, pieceSize - 2 * spacing, pieceSize - 2 * spacing);
                 } else {
                     g.setColor(Color.white);
-                    g.fillRect(x + padding + pieceSize * dx+spacing, y + padding + pieceSize * dy+spacing, pieceSize-2*spacing, pieceSize-2*spacing);
+                    g.fillRect(x + padding + pieceSize * dx + spacing, y + padding + pieceSize * dy + spacing, pieceSize - 2 * spacing, pieceSize - 2 * spacing);
                 }
             }
         }
 
     }
 
-    public boolean isGridFull(){
+    public boolean isGridFull() {
         for (int i = 0; i < 9; i++) {
-            if(grid[i]==GridPiece.NONE){
+            if (grid[i] == GridPiece.NONE) {
                 return false;
             }
         }
@@ -158,7 +157,7 @@ public class XOGrid {
     @Override
     protected XOGrid clone() {
         XOGrid newGrid = new XOGrid();
-        newGrid.grid = Arrays.copyOf(grid,9);
+        newGrid.grid = Arrays.copyOf(grid, 9);
         newGrid.winner = winner;
         return newGrid;
     }
@@ -166,10 +165,10 @@ public class XOGrid {
 
     public boolean equals(XOGrid otherGrid) {
         for (int i = 0; i < 9; i++) {
-            if(grid[i]!= otherGrid.grid[i]) return false;
+            if (grid[i] != otherGrid.grid[i]) return false;
         }
 
-        
+
         return true;
     }
 

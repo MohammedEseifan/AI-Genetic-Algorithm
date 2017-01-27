@@ -8,9 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 
-import static GeneticImplemenations.Ten.Implementation.XOGrid.GridPiece.NONE;
-import static GeneticImplemenations.Ten.Implementation.XOGrid.GridPiece.O;
-import static GeneticImplemenations.Ten.Implementation.XOGrid.GridPiece.X;
+import static GeneticImplemenations.Ten.Implementation.XOGrid.GridPiece.*;
 
 /**
  * Created by Mohammed on 26-Jan-17.
@@ -20,11 +18,11 @@ public class GameTree {
     private TenDNA dna;
     private int maxDepth;
 
-    public GameTree(MainGrid startGrid, int maxDepth, XOGrid.GridPiece startType, TenDNA dna) {
+    public GameTree(MainGrid startGrid, int maxDepth, TenDNA dna) {
         root = new Node(null, startGrid, X);
-        this.dna=dna;
-        this.maxDepth=maxDepth;
-        generateTree(root,maxDepth);
+        this.dna = dna;
+        this.maxDepth = maxDepth;
+        generateTree(root, maxDepth);
         root.calculateValue(dna);
     }
 
@@ -37,11 +35,11 @@ public class GameTree {
         //Flipping node type if the 'parentNode' isnt the root node
         XOGrid.GridPiece childType = parentNode.getParent() == null ? parentNode.getNodeType() : inverseGridPiece(parentNode.getNodeType());
 
-        for (Integer mainGridIndex: validMoves) {
+        for (Integer mainGridIndex : validMoves) {
             List<Integer> xoGridMoves = currentMainGrid.getXOGridOpenSpots(mainGridIndex);
-            for (Integer innerGridIndex: xoGridMoves){
-                Node newNode = new Node(parentNode,mainGridIndex,innerGridIndex,childType);
-                generateTree(newNode,level-1);
+            for (Integer innerGridIndex : xoGridMoves) {
+                Node newNode = new Node(parentNode, mainGridIndex, innerGridIndex, childType);
+                generateTree(newNode, level - 1);
                 newNode.calculateValue(dna);
                 parentNode.addChild(newNode);
             }
@@ -49,19 +47,16 @@ public class GameTree {
     }
 
 
-    public int[] getBestMove(MainGrid newGrid){
+    Move getBestMove(MainGrid newGrid) {
         Queue<Node> nodeBuffer = new ArrayDeque<>();
-        Node currentNode=root;
-        if(root.getValue()==248){
-            System.out.println("df");
-        }
-        while(!currentNode.getGrid().equals(newGrid)){
+        Node currentNode = root;
+        while (!currentNode.getGrid().equals(newGrid)) {
             nodeBuffer.addAll(currentNode.getChildren());
-            currentNode=nodeBuffer.poll();
+            currentNode = nodeBuffer.poll();
 
-            if(currentNode == null){
-                currentNode=root;
-                while(!currentNode.getGrid().equals(newGrid)) {
+            if (currentNode == null) {
+                currentNode = root;
+                while (!currentNode.getGrid().equals(newGrid)) {
                     nodeBuffer.addAll(currentNode.getChildren());
                     currentNode = nodeBuffer.poll();
                 }
@@ -70,13 +65,13 @@ public class GameTree {
 
 
         Node bestChild = currentNode.getChildren().get(0);
-        boolean max=currentNode.getNodeType()==O;
-        for (Node child:currentNode.getChildren()){
-            if((max&& bestChild.getValue()<child.getValue()) || (!max && bestChild.getValue()>child.getValue())){ //If we're returning the max child and current child is greater OR if we're returning min and current child is less than
+        boolean max = currentNode.getNodeType() == O;
+        for (Node child : currentNode.getChildren()) {
+            if ((max && bestChild.getValue() < child.getValue()) || (!max && bestChild.getValue() > child.getValue())) { //If we're returning the max child and current child is greater OR if we're returning min and current child is less than
                 bestChild = child;
             }
         }
-        root=bestChild;
+        root = bestChild;
         root.clearParent();
         generateExtraLevel(root, getTreeDepth());
         return bestChild.getMoveDirections();
@@ -84,10 +79,10 @@ public class GameTree {
 
     }
 
-    public int getTreeDepth(){
-        int i=0;
+    private int getTreeDepth() {
+        int i = 0;
         Node currentNode = root;
-        while(currentNode.getChildren().size()>0){
+        while (currentNode.getChildren().size() > 0) {
             currentNode = currentNode.getChildren().get(0);
             i++;
         }
@@ -95,16 +90,15 @@ public class GameTree {
     }
 
     private void generateExtraLevel(Node currentNode, int currentDepth) {
-        if(currentNode.getChildren().size()>0){
-            for (Node child: currentNode.getChildren()){
+        if (currentNode.getChildren().size() > 0) {
+            for (Node child : currentNode.getChildren()) {
                 generateExtraLevel(child, currentDepth);
                 child.calculateValue(dna);
             }
-        }else{
-            generateTree(currentNode,maxDepth-currentDepth);
+        } else {
+            generateTree(currentNode, maxDepth - currentDepth);
         }
     }
-
 
 
     private XOGrid.GridPiece inverseGridPiece(XOGrid.GridPiece x) {
@@ -112,80 +106,62 @@ public class GameTree {
     }
 
 
-    public Node getRoot() {
-        return root;
-    }
-
-
 }
 
 class Node {
     private Node parent;
-    private List<Node> children;
+    private List<Node> children = new ArrayList<>();
     private MainGrid grid;
     private int value;
-    private int mainGridIndex;
-    private int innerGridIndex;
     private XOGrid.GridPiece nodeType;
+    private Move deltaMove;
 
-    public Node(Node parent, int mainGridIndex, int innerGridIndex, XOGrid.GridPiece nodeType) {
+    Node(Node parent, int mainGridIndex, int innerGridIndex, XOGrid.GridPiece nodeType) {
         this.parent = parent;
         this.grid = parent.getGrid().clone();
-        this.mainGridIndex = mainGridIndex;
-        this.innerGridIndex = innerGridIndex;
         this.nodeType = nodeType;
-        try {
-            grid.setPiece(mainGridIndex,innerGridIndex,nodeType);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        children = new ArrayList<Node>();
+        deltaMove = new Move(mainGridIndex, innerGridIndex, nodeType);
     }
 
-    public Node(Node parent, MainGrid grid, XOGrid.GridPiece nodeType) {
+    Node(Node parent, MainGrid grid, XOGrid.GridPiece nodeType) {
         this.parent = parent;
         this.grid = grid;
         this.nodeType = nodeType;
-        children = new ArrayList<Node>();
     }
 
-    public Node getParent() {
+    Node getParent() {
         return parent;
     }
 
-    public int[] getMoveDirections(){
-        return new int[] {mainGridIndex,innerGridIndex};
+    Move getMoveDirections() {
+        return deltaMove;
     }
 
-    public List<Node> getChildren() {
+    List<Node> getChildren() {
         return children;
     }
 
-    public void addChild(Node n){
+    void addChild(Node n) {
         children.add(n);
     }
 
-    public XOGrid.GridPiece getNodeType() {
+    XOGrid.GridPiece getNodeType() {
         return nodeType;
     }
 
-    public int getValue() {
+    int getValue() {
         return value;
     }
 
-    public MainGrid getGrid() {
+    MainGrid getGrid() {
         return grid;
     }
 
-    public void setValue(int value) {
-        this.value = value;
-    }
-
-    public void calculateValue(TenDNA dna) {
-        if(children.size()==0){ //If this is a leaf
-            switch (grid.getWinner()){
+    void calculateValue(TenDNA dna) {
+        if (children.size() == 0) { //If this is a leaf
+            switch (grid.getWinner()) {
                 case X:
-                    this.value=Integer.MAX_VALUE;
+                    this.value = Integer.MAX_VALUE;
                     break;
                 case O:
                     this.value = Integer.MIN_VALUE;
@@ -194,27 +170,27 @@ class Node {
                     this.value = heuristicEvaluation(dna);
                     break;
             }
-        }else{
-            this.value=getMinMax(nodeType== X);
+        } else {
+            this.value = getMinMax(nodeType == X);
         }
     }
 
-    private int getMinMax(boolean max){
-        int value = max?Integer.MIN_VALUE:Integer.MAX_VALUE;
-        for (Node child:children){
-            if((max&& value<child.getValue()) || (!max && value>child.getValue())){ //If we're returning the max child and current child is greater OR if we're returning min and current child is less than
+    private int getMinMax(boolean max) {
+        int value = max ? Integer.MIN_VALUE : Integer.MAX_VALUE;
+        for (Node child : children) {
+            if ((max && value < child.getValue()) || (!max && value > child.getValue())) { //If we're returning the max child and current child is greater OR if we're returning min and current child is less than
                 value = child.getValue();
             }
         }
         return value;
     }
 
-    private int heuristicEvaluation(TenDNA dna){
+    private int heuristicEvaluation(TenDNA dna) {
         //Getting number of grids won
         int numGridsWon = 0;
         List<Integer> gridsWon = new ArrayList<>();
         for (int i = 0; i < 9; i++) {
-            if(nodeType==grid.getInnerGridWinner(i)){
+            if (nodeType == grid.getInnerGridWinner(i)) {
                 numGridsWon++;
                 gridsWon.add(i);
             }
@@ -222,85 +198,84 @@ class Node {
 
 
         int mainGridWinCombinations[][] = {
-            {0, 1, 2}, //Row 1 (from top)
-            {3, 4, 5}, //Row 2
-            {6, 7, 8}, //Row 3
-            {0, 3, 6}, //Column 1 (from left)
-            {1, 4, 7}, //Column 2
-            {2, 5, 8}, //Column 3
-            {0, 4, 8}, //Left Diagonal
-            {2, 4, 6}};//Right Diagonal
+                {0, 1, 2}, //Row 1 (from top)
+                {3, 4, 5}, //Row 2
+                {6, 7, 8}, //Row 3
+                {0, 3, 6}, //Column 1 (from left)
+                {1, 4, 7}, //Column 2
+                {2, 5, 8}, //Column 3
+                {0, 4, 8}, //Left Diagonal
+                {2, 4, 6}};//Right Diagonal
 
-        int gridsNeededForWin=0;
-        int possibleWinPaths =0;
-        for(Integer currentGrid:gridsWon){
+        int gridsNeededForWin = 0;
+        int possibleWinPaths = 0;
+        for (Integer currentGrid : gridsWon) {
             for (int i = 0; i < mainGridWinCombinations.length; i++) { //Looping through each combination
-                if(mainGridWinCombinations[i]==null) continue;
+                if (mainGridWinCombinations[i] == null) continue;
                 int tempCount = 0;
                 boolean found = false;
                 for (int j = 0; j < 3; j++) {
                     int num = mainGridWinCombinations[i][j];
-                    found = num ==currentGrid || found;
-                    if(grid.getInnerGridWinner(num)==NONE){
+                    found = num == currentGrid || found;
+                    if (grid.getInnerGridWinner(num) == NONE) {
                         tempCount++;
                     }
                 }
-                if (found){
-                    gridsNeededForWin+=tempCount;
+                if (found) {
+                    gridsNeededForWin += tempCount;
                     possibleWinPaths++;
-                    mainGridWinCombinations[i]=null;
+                    mainGridWinCombinations[i] = null;
                 }
             }
         }
 
         int innerGridWinCombinations[][] = {
-            {0, 1, 2}, //Row 1 (from top)
-            {3, 4, 5}, //Row 2
-            {6, 7, 8}, //Row 3
-            {0, 3, 6}, //Column 1 (from left)
-            {1, 4, 7}, //Column 2
-            {2, 5, 8}, //Column 3
-            {0, 4, 8}, //Left Diagonal
-            {2, 4, 6}};//Right Diagonal
+                {0, 1, 2}, //Row 1 (from top)
+                {3, 4, 5}, //Row 2
+                {6, 7, 8}, //Row 3
+                {0, 3, 6}, //Column 1 (from left)
+                {1, 4, 7}, //Column 2
+                {2, 5, 8}, //Column 3
+                {0, 4, 8}, //Left Diagonal
+                {2, 4, 6}};//Right Diagonal
 
 
-        int piecesNeededForWin=0;
-        int innerGridWinPaths =0;
-        for(int x=0;x<9;x++){
-            for(Integer currentGrid:grid.getInnerGrid(x).getIndexOfPiece(nodeType)){
+        int piecesNeededForWin = 0;
+        int innerGridWinPaths = 0;
+        for (int x = 0; x < 9; x++) {
+            for (Integer currentGrid : grid.getInnerGrid(x).getIndexOfPiece(nodeType)) {
                 for (int i = 0; i < innerGridWinCombinations.length; i++) { //Looping through each combination
-                    if(innerGridWinCombinations[i]==null) continue;
+                    if (innerGridWinCombinations[i] == null) continue;
                     int tempCount = 0;
                     boolean found = false;
                     for (int j = 0; j < 3; j++) {
                         int num = innerGridWinCombinations[i][j];
-                        found = num ==currentGrid || found;
-                        if(grid.getInnerGrid(x).getPiece(num)==NONE){
+                        found = num == currentGrid || found;
+                        if (grid.getInnerGrid(x).getPiece(num) == NONE) {
                             tempCount++;
                         }
                     }
-                    if (found){
-                        piecesNeededForWin+=tempCount;
+                    if (found) {
+                        piecesNeededForWin += tempCount;
                         innerGridWinPaths++;
-                        innerGridWinCombinations[i]=null;
+                        innerGridWinCombinations[i] = null;
                     }
                 }
             }
         }
 
 
+        int finalScore =
+                (int) (Math.pow(dna.getAttribute("mainWonGrids"), numGridsWon) +
+                        Math.pow(dna.getAttribute("mainWinPaths"), possibleWinPaths) -
+                        Math.pow(dna.getAttribute("mainGridsNeeded"), gridsNeededForWin) -
+                        dna.getAttribute("innerPiecesNeeded") * piecesNeededForWin +
+                        dna.getAttribute("innerWinPaths") * innerGridWinPaths);
 
-        int finalScore=
-                (int) (Math.pow(dna.getAttribute("mainWonGrids"),numGridsWon)+
-                        Math.pow(dna.getAttribute("mainWinPaths"),possibleWinPaths)-
-                        Math.pow(dna.getAttribute("mainGridsNeeded"),gridsNeededForWin)-
-                        dna.getAttribute("innerPiecesNeeded")*piecesNeededForWin+
-                        dna.getAttribute("innerWinPaths")*innerGridWinPaths);
-
-        return finalScore * (nodeType==X?1:-1);
+        return finalScore * (nodeType == X ? 1 : -1);
     }
 
-    public void clearParent(){
-        this.parent=null;
+    void clearParent() {
+        this.parent = null;
     }
 }

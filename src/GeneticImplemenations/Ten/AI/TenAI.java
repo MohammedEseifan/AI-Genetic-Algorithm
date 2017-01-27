@@ -10,25 +10,25 @@ import java.util.Random;
  */
 public class TenAI {
 
-    private Random randomGenerator= new Random();
+    private Random randomGenerator = new Random();
     private TenDNA data;
     private XOGrid.GridPiece AIPiece;
     private GameTree tree;
 
-    public void playTurn(MainGrid grid){
+    public void playTurn(MainGrid grid) {
         int[] move = tree.getBestMove(grid);
         try {
-            grid.setPiece(move[0],move[1],AIPiece);
+            grid.setPiece(move[0], move[1], AIPiece);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
     }
 
 
-    public TenAI(TenDNA data, XOGrid.GridPiece piece){
-        this.data=data;
-        this.AIPiece=piece;
-        tree= new GameTree(new MainGrid(),4,piece,data);
+    public TenAI(TenDNA data, XOGrid.GridPiece piece) {
+        this.data = data;
+        this.AIPiece = piece;
+        tree = new GameTree(new MainGrid(), 4, piece, data);
     }
 
 }

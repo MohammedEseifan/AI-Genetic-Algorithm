@@ -8,9 +8,10 @@ import GeneticAlgorithm.Population;
 public class TextPopulation extends Population {
 
     private String targetString;
+
     public TextPopulation(int populationSize, float DNAMutationRate, String targetString) {
         super(populationSize, DNAMutationRate);
-        this.targetString= targetString;
+        this.targetString = targetString;
         for (int i = 0; i < populationSize; i++) {
             population[i] = new TextDNA(targetString);
         }
