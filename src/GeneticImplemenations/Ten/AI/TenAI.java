@@ -3,7 +3,6 @@ package GeneticImplemenations.Ten.AI;
 import GeneticImplemenations.Ten.Implementation.MainGrid;
 import GeneticImplemenations.Ten.Implementation.XOGrid;
 
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -14,14 +13,12 @@ public class TenAI {
     private Random randomGenerator= new Random();
     private TenDNA data;
     private XOGrid.GridPiece AIPiece;
-
+    private GameTree tree;
 
     public void playTurn(MainGrid grid){
-        List<Integer> gridValidSpots  = grid.getValidSpots();
-        int gridIndex= gridValidSpots.get(randomGenerator.nextInt(gridValidSpots.size()));
-        List<Integer> openSpots  = grid.getXOGridOpenSpots(gridIndex);
+        int[] move = tree.getBestMove();
         try {
-            grid.setPiece(gridIndex,openSpots.get(randomGenerator.nextInt(openSpots.size())),AIPiece);
+            grid.setPiece(move[0],move[1],AIPiece);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
@@ -31,6 +28,7 @@ public class TenAI {
     public TenAI(TenDNA data, XOGrid.GridPiece piece){
         this.data=data;
         this.AIPiece=piece;
+        tree= new GameTree(new MainGrid(),4,piece,data);
     }
 
 }

@@ -2,6 +2,7 @@ package GeneticImplemenations.Ten.Implementation;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -128,5 +129,12 @@ public class XOGrid {
             }
         }
         return true;
+    }
+
+    @Override
+    protected XOGrid clone() {
+        XOGrid newGrid = new XOGrid();
+        newGrid.grid = Arrays.copyOf(grid,9);
+        return newGrid;
     }
 }

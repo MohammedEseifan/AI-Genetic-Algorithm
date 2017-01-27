@@ -124,4 +124,14 @@ public class MainGrid{
         }
     }
 
+
+    @Override
+    public MainGrid clone() {
+        MainGrid newGrid = new MainGrid();
+        for (int i = 0; i < 9; i++) {
+            newGrid.grid[i] = grid[i].clone();
+            newGrid.validSpots.addAll(validSpots);
+        }
+        return newGrid;
+    }
 }

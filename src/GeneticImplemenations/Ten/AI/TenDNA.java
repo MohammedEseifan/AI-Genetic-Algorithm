@@ -18,6 +18,10 @@ public class TenDNA extends DNA implements Serializable {
     private TenDNA enemyDNA;
     private final int TEST_GAMES = 10;
 
+    public TenDNA() {
+
+    }
+
     public void setEnemyDNA(TenDNA enemyDNA) {
         this.enemyDNA = enemyDNA;
     }
